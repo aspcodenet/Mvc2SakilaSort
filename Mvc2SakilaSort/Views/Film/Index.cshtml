@@ -1,0 +1,62 @@
+﻿@model Mvc2SakilaSort.ViewModels.FileListViewModel
+@{
+    ViewData["Title"] = "Index";
+
+    string GetClickSortOrder(string columnName)
+    {
+        if (columnName == Model.SortColumn)
+        {
+            string o = "asc";
+            if (Model.SortOrder == "asc")
+            {
+                o = "desc";
+            }
+            return o;
+        }
+        else
+        {
+            return "asc";
+        }
+    }
+
+    void RenderSortIcon(string columnName)
+    {
+        if (columnName != Model.SortColumn)
+        {
+            return;
+        }
+        string o = "asc";
+        if (Model.SortOrder == "asc")
+        {
+            o = "desc";
+        }
+
+        <i class="fa fa-fw fa-sort-@o"></i>
+    }
+
+
+}
+
+<h1>Orders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"><a asp-controller="Film" asp-action="Index" asp-route-sortcolumn="id" asp-route-sortorder="@GetClickSortOrder("id")">Id @{ RenderSortIcon("id");}</a></th>
+            <th scope="col"><a asp-controller="Film" asp-action="Index" asp-route-sortcolumn="namn" asp-route-sortorder="@GetClickSortOrder("namn")">Title @{ RenderSortIcon("namn"); }</a></th>
+            <th scope="col"><a asp-controller="Film" asp-action="Index" asp-route-sortcolumn="datum" asp-route-sortorder="@GetClickSortOrder("datum")">Released @{ RenderSortIcon("datum"); }</a></th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Films)
+        {
+            <tr>
+                <th scope="row">@order.Id</th>
+                <td>@order.Title</td>
+                <td>@order.ReleaseYear</td>
+                <td><a asp-action="View" asp-route-id="@order.Id">View</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
